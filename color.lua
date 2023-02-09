@@ -1,85 +1,134 @@
 ---@class Color @This library provides basic color functions.
 local module = {
-    _version = "color.lua V1.0",
+    _version = "color.lua V1.0.1",
     _description = "a simple Love2d Color lib",
 }
 local brighteningValue = 1.25
 local dimmingValue = 0.75
-local Color = {}
-Color.__index = Color
+local color = {}
+color.__index = color
 
+--- Initialize a new color object
+--- @overload fun(r, g, b, a)
+--- @overload fun(hex, a) where hex is a string like "FF0000"
+--- @param r number Red value
+--- @param g number Green value
+--- @param b number Blue value
+--- @param a number Alpha value
+--- @return Color color object
 local function new(r, g, b, a)
+    -- If first argument is a string, then it's a hex value
     if type(r) == "string" then
+        -- Convert from hex to RGB and store in r, g, b
+        r, g, b = color.HEXToRGB(r)
+        -- Alpha value is passed in g
         a = g
-        r, g, b = Color.HEXToRGB(r)
     else
+        -- If RGB values are between 0 and 1, then they are already normalized
         if r <= 1 and g <= 1 and b <= 1 then
+            -- Use the RGB values as is
             r, g, b = r, g, b
         else
+            -- Otherwise, normalize RGB values
             r = r / 255
             g = g / 255
             b = b / 255
         end
     end
+    -- If alpha is not passed in, set it to 1
     a = a or 1
 
+    -- Assert alpha value is between 0 and 1
+    assert(a <= 1, "Alpha value must be between 0 and 1")
+    -- Return new color object
     return setmetatable({
         r = r,
         g = g,
         b = b,
         a = a,
-    }, Color)
+    }, color)
 end
 
-function Color:__tostring()
+--- @return string
+function color:__tostring()
+    -- This function allows you to print a color object to the console
     return "Color (r= " .. tonumber(self.r) .. ", g= " .. tonumber(self.g) .. ", b= " .. tonumber(self.b) .. ", a= "
                .. tonumber(self.a) .. ")"
 end
 
-function Color:SetBackground()
-    love.graphics.setBackgroundColor(self.r, self.g, self.b, self.a)
+--- Set the background color to this color
+function color:SetBackground()
+    love.graphics.clear(self.r, self.g, self.b)
 end
 
--- a-> alpha value from 0 to 1
-function Color:Set(a)
+--- Sets the color of the next object to be drawn
+--- @param a number alpha value from 0 to 1
+function color:Set(a)
     love.graphics.setColor(self.r, self.g, self.b, a or self.a)
 end
 
-function Color:inverted()
+--- @return Color inverted copy of color
+function color:inverted()
     return new(1 - self.r, 1 - self.g, 1 - self.b, self.a)
 end
 
+--- This function takes a list of colors and returns the average of those colors.
+--- @param colors table a list of color objects
 local function Average(colors)
-    local r, g, b, a = 0, 0, 0, 0
+    -- Initialize the total hue, saturation, lightness and alpha values to 0.
+    local h, s, l, a = 0, 0, 0, 0
+    -- Loop through each color in the list.
     for _, color in ipairs(colors) do
-        r = r + color.r
-        g = g + color.g
-        b = b + color.b
+        -- Add the hue, saturation, lightness and alpha values of the current color to the total values.
+        h = h + color.h
+        s = s + color.s
+        l = l + color.l
         a = a + color.a
     end
-    return new(r / #colors, g / #colors, b / #colors, a / #colors)
+    -- Return the average of the total values.
+    return new(h / #colors, s / #colors, l / #colors, a / #colors)
 end
 
+--- Sets the color of the next object to be drawn to white
 local function Reset()
-    return new(1, 1, 1):Set()
+    WHITE:Set()
 end
 
-function Color:SetBrightened(a)
-    love.graphics.setColor(self.r * brighteningValue, self.g * brighteningValue, self.b * brighteningValue, a or self.a)
+--- sets the color of the object to the brightened version
+--- @param a number alpha value from 0 to 1
+function color:SetBrightened(a) 
+    love.graphics.setColor(self.r * brighteningValue, self.g * brighteningValue, self.b * brighteningValue, a or self.a) -- sets the color to the brightened version of the color
 end
 
-function Color:SetDimmed(a)
+--- Set the color to the dimmed version of the color
+--- @param a number alpha value from 0 to 1
+function color:SetDimmed(a)
     love.graphics.setColor(self.r * dimmingValue, self.g * dimmingValue, self.b * dimmingValue, a or self.a)
 end
 
-function Color.HEXToRGB(hex)
+-- this function converts the color into a table of r, g, b values
+function color:ToTable()
+    return {self.r, self.g, self.b}
+end
+
+--- function to convert hex to rgb
+function color.HEXToRGB(hex)
+    -- remove # from hex string
     local hex = hex:gsub("#", "")
+    -- if hex is 3 characters long
     if hex:len() == 3 then
+        -- return the red, green, and blue values
         return (tonumber("0x" .. hex:sub(1, 1)) * 17) / 255, (tonumber("0x" .. hex:sub(2, 2)) * 17) / 255,
                (tonumber("0x" .. hex:sub(3, 3)) * 17) / 255
-    else
+    -- if hex is 6 characters long
+    elseif hex:len() == 6 then
+        -- return the red, green, and blue values
         return tonumber("0x" .. hex:sub(1, 2)) / 255, tonumber("0x" .. hex:sub(3, 4)) / 255,
                tonumber("0x" .. hex:sub(5, 6)) / 255
+    -- if hex is not 3 or 6 characters
+    else
+        -- throw an error
+        error("Invalid hex string!")
     end
 end
 
@@ -186,7 +235,7 @@ LIGHT_BROWN = new("#CD853F")
 GRAY_BROWN = new("#736357")
 DARK_BROWN = new("#8B4513")
 
-return setmetatable(module, {
+Color = setmetatable(module, {
     __call = function(_, ...)
         return new(...)
     end,
