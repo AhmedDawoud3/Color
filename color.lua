@@ -19,10 +19,10 @@ color.__index = color
 local function new(r, g, b, a)
     -- If first argument is a string, then it's a hex value
     if type(r) == "string" then
-        -- Convert from hex to RGB and store in r, g, b
-        r, g, b = color.HEXToRGB(r)
         -- Alpha value is passed in g
         a = g
+        -- Convert from hex to RGB and store in r, g, b
+        r, g, b = color.HEXToRGB(r)
     else
         -- If RGB values are between 0 and 1, then they are already normalized
         if r <= 1 and g <= 1 and b <= 1 then
