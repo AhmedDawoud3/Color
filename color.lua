@@ -23,17 +23,23 @@ local function new(r, g, b, a)
         a = g
         -- Convert from hex to RGB and store in r, g, b
         r, g, b = color.HEXToRGB(r)
+    elseif type(r) == "table" then
+        -- If first argument is a table, then it's a list of RGB values
+        -- Set r, g and b to the values in the table
+        r, g, b = r[1], r[2], r[3]
+        -- If there is a fourth value, then it's the alpha value
+        a = r[4]
+    end
+    
+    -- If RGB values are between 0 and 1, then they are already normalized
+    if r <= 1 and g <= 1 and b <= 1 then
+        -- Use the RGB values as is
+        r, g, b = r, g, b
     else
-        -- If RGB values are between 0 and 1, then they are already normalized
-        if r <= 1 and g <= 1 and b <= 1 then
-            -- Use the RGB values as is
-            r, g, b = r, g, b
-        else
-            -- Otherwise, normalize RGB values
-            r = r / 255
-            g = g / 255
-            b = b / 255
-        end
+        -- Otherwise, normalize RGB values
+        r = r / 255
+        g = g / 255
+        b = b / 255
     end
     -- If alpha is not passed in, set it to 1
     a = a or 1

@@ -35,6 +35,10 @@ myColor = Color(251,96,106)
 
 myColor = Color(0.98,0.38,0.42)
 
+myColor = Color( {251, 96, 106} )
+
+myColor = Color( {0.98, 0.38, 0.42} )
+
 myColor = Color("#fb606a")
 ```
 
@@ -71,42 +75,63 @@ myColor = Color.Average({PURE_RED, PURE_GREEN})
 ```
 
 ---
+
 ### Color:Set(a)
+
 Called on a color to set it.<br>
 Takes optional argument `a` to overload the already existing value for the color.
+
 ```lua
 myColor:Set()    --> Set the color with it's original value
 myColor:Set(0.5) --> Set the color with 50% opacity
 ```
+
 ---
+
 ### Color:SetBackground()
+
 Called on a color to set it as background.
+
 ```lua
 myColor:SetBackground()
 ```
+
 ---
+
 ### Color:inverted()
+
 Returns an inverted copy of the color.
+
 ```lua
 newColor = myColor:inverted()
 ```
+
 ### Color:SetDimmed(a) || Color:SetBrightened(a)
+
 Sets a lighter/dimmed variant of the color.
 
 ---
+
 ### Color:ToTable()
+
 Returns a table with {r, g, b, a}
+
 ```lua
 colorTable = myColor:ToTable()
 ```
+
 ---
+
 ### Color:Unpack()
+
 Return r, g, b, a values
+
 ```lua
 r, g, b, a = myColor:Unpack()
 ```
 
 ## Preset Colors
+
 Here's the list of preset colors
 
 `WHITE #FFFFFF `<br>
@@ -121,7 +146,6 @@ Here's the list of preset colors
 `GRAY is GRAY_C`<br>
 `DARK_GRAY is GRAY_D`<br>
 `DARKER_GRAY is GRAY_E`<br>
-
 
 `BLUE_A #C7E9F1 `<br>
 `BLUE_B #9CDCEB `<br>
@@ -160,7 +184,6 @@ Here's the list of preset colors
 `GOLD_D #E1A158 `<br>
 `GOLD_E #C78D46 `<br>
 `GOLD is GOLD_C`<br>
-
 
 `RED_A #F7A1A3 `<br>
 `RED_B #FF8080 `<br>
