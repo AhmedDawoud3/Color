@@ -94,6 +94,18 @@ newColor = myColor:inverted()
 Sets a lighter/dimmed variant of the color.
 
 ---
+### Color:ToTable()
+Returns a table with {r, g, b, a}
+```lua
+colorTable = myColor:ToTable()
+```
+---
+### Color:Unpack()
+Return r, g, b, a values
+```lua
+r, g, b, a = myColor:Unpack()
+```
+
 ## Preset Colors
 Here's the list of preset colors
 

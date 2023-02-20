@@ -96,7 +96,7 @@ end
 
 --- sets the color of the object to the brightened version
 --- @param a number alpha value from 0 to 1
-function color:SetBrightened(a) 
+function color:SetBrightened(a)
     love.graphics.setColor(self.r * brighteningValue, self.g * brighteningValue, self.b * brighteningValue, a or self.a) -- sets the color to the brightened version of the color
 end
 
@@ -106,9 +106,14 @@ function color:SetDimmed(a)
     love.graphics.setColor(self.r * dimmingValue, self.g * dimmingValue, self.b * dimmingValue, a or self.a)
 end
 
--- this function converts the color into a table of r, g, b values
+-- this function converts the color into a table of r, g, b, a values
 function color:ToTable()
-    return {self.r, self.g, self.b}
+    return {self.r, self.g, self.b, self.a}
+end
+
+-- Return the red, green, blue and alpha values of this color.
+function color:Unpack()
+    return self.r, self.g, self.b, self.a
 end
 
 --- function to convert hex to rgb
@@ -120,12 +125,12 @@ function color.HEXToRGB(hex)
         -- return the red, green, and blue values
         return (tonumber("0x" .. hex:sub(1, 1)) * 17) / 255, (tonumber("0x" .. hex:sub(2, 2)) * 17) / 255,
                (tonumber("0x" .. hex:sub(3, 3)) * 17) / 255
-    -- if hex is 6 characters long
+        -- if hex is 6 characters long
     elseif hex:len() == 6 then
         -- return the red, green, and blue values
         return tonumber("0x" .. hex:sub(1, 2)) / 255, tonumber("0x" .. hex:sub(3, 4)) / 255,
                tonumber("0x" .. hex:sub(5, 6)) / 255
-    -- if hex is not 3 or 6 characters
+        -- if hex is not 3 or 6 characters
     else
         -- throw an error
         error("Invalid hex string!")
