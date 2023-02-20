@@ -26,9 +26,7 @@ local function new(r, g, b, a)
     elseif type(r) == "table" then
         -- If first argument is a table, then it's a list of RGB values
         -- Set r, g and b to the values in the table
-        r, g, b = r[1], r[2], r[3]
-        -- If there is a fourth value, then it's the alpha value
-        a = r[4]
+        r, g, b, a = r[1], r[2], r[3], r[4]
     end
     
     -- If RGB values are between 0 and 1, then they are already normalized
