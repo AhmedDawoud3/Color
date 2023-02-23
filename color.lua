@@ -98,6 +98,16 @@ local function Reset()
     WHITE:Set()
 end
 
+--- @return Color Dimmed copy of color
+function color:Dimmed()
+    return new(self.r * dimmingValue, self.g * dimmingValue, self.b * dimmingValue, self.a)
+end
+
+--- @return Color Brightened copy of color
+function color:Brightened()
+    return new(self.r * brighteningValue, self.g * brighteningValue, self.b * brighteningValue, self.a)
+end
+
 --- sets the color of the object to the brightened version
 --- @param a number alpha value from 0 to 1
 function color:SetBrightened(a)

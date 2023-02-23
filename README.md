@@ -112,6 +112,15 @@ Sets a lighter/dimmed variant of the color.
 
 ---
 
+### Color:Dimmed() || Color:Brightened()
+
+Returns a lighter/dimmed variant of the color.
+```lua
+darker = myColor:Dimmed()
+lighter = myColor:Brightened()
+```
+---
+
 ### Color:ToTable()
 
 Returns a table with {r, g, b, a}
